@@ -28,10 +28,12 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model){
+    public String findAll(Model model){     // 데이터를 가져올 때 Model 객체를 사용한다.
         // DB에서 전체 데이터 게시글을 가져와서 index.html에 보여준다.
-        List<BoardDTO> boardDTOList =  boardService.findAll();
-        model.addAttribute("boardList",boardDTOList);
+        List<BoardDTO> boardDTOList =  boardService.findAll();  // boardDto 객체가 담겨있는 List를 서비스단에서 찾고
+        // 가져온 데이터를 모델 객체 담는다.
+        model.addAttribute("boardList",boardDTOList);   // "boardList"라는 이름으로 boardDTOList 객체를 담는 코드 (타임리프 사용)
+
         return "list";
     }
 }
