@@ -5,9 +5,11 @@ import com.board.entity.BoardEntity;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // DTO -> Entity (Entity Class)
 // Entity -> Dto (DTO Class)
@@ -34,5 +36,23 @@ public class BoardService {
         }
         // EntityList를 DtoList에 담고 컨트롤러로 리턴
         return boardDTOList;
+    }
+
+
+    // 수동적인 쿼리를 수행해야 하는 경우 일관성 유지를 위해 @Transactional를 사용
+    @Transactional
+    public void updateHits(Long id) {
+        boardRepository.updateHits(id);
+    }
+
+    public BoardDTO findById(Long id) {
+        Optional<BoardEntity> byId = boardRepository.findById(id);
+        if (byId.isPresent()){
+            BoardEntity boardEntity = byId.get();
+            BoardDTO boardDTO = BoardDTO.toBoardDTO(boardEntity);
+            return boardDTO;
+        }else{
+            return null;
+        }
     }
 }
