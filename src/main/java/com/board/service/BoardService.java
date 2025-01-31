@@ -4,6 +4,10 @@ import com.board.dto.BoardDTO;
 import com.board.entity.BoardEntity;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,5 +76,16 @@ public class BoardService {
 
     public void delete(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    public Page<BoardDTO> paging(Pageable pageable) {
+        int page = pageable.getPageNumber()-1;  // 몇 페이지를 보고싶은지
+        int pageLimit = 3;  // 한 페이지에 몇개씩 볼건지
+        Page<BoardEntity> boardEntities =
+                // 보고싶은 페이지 인덱스 , 페이지 당 글 갯수 , id기준 내림차순 정렬
+                // 한 페이지당 3개씩 id기준 내림차순 정렬
+                // page 위치에 있는 값은 0부터 시작하기 때문에 사용자로부터 받은 pageNumber에서 -1을 해줘야 올바른 데이터를 가져올 수 있다.
+                boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
+
     }
 }
