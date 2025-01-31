@@ -55,4 +55,17 @@ public class BoardService {
             return null;
         }
     }
+
+    /*
+        repository에 update 기능은 없다.
+        save()로 insert와 update를 같이 사용
+        구분 방법은 id가 있냐 없냐의 차이
+        id값이 존재하면 update로 받아들임
+     */
+
+    public BoardDTO update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+        boardRepository.save(boardEntity);
+        return findById(boardDTO.getId());
+    }
 }
