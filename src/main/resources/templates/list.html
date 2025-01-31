@@ -9,7 +9,7 @@
     <tr>
         <th>id</th>
         <th>title</th>
-        <th>title(||쓰지 않은 경우)</th>
+<!--        <th>title(||쓰지 않은 경우)</th>-->
         <th>writer</th>
         <th>date</th>
         <th>hits</th>
@@ -22,7 +22,7 @@
             사용한 경우 - http://localhost:8080/board/1
             사용하지 않은 경우 - http://localhost:8080/board/$%7Bboard.id%7D
         -->
-        <td><a th:href="@{/board/${board.id}}" th:text="${board.boardTitle}"></a></td>
+<!--        <td><a th:href="@{/board/${board.id}}" th:text="${board.boardTitle}"></a></td>-->
         <td th:text="${board.boardWriter}"></td>
         <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${board.boardHits}"></td>
