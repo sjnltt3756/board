@@ -3,6 +3,9 @@ package com.board.controller;
 import com.board.dto.BoardDTO;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,5 +70,12 @@ public class BoardController {
     public String delete(@PathVariable Long id){
         boardService.delete(id);
         return "redirect:/board/";
+    }
+
+    // /board/paging?page=1
+    @GetMapping("/paging")
+    public String paging(@PageableDefault(page = 1)Pageable pageable, Model model){     // @RequestParam을 이용해도 되지만 SpringBoot에서 제공하는 방식을 활용
+//        pageable.getPageNumber();
+        Page<BoardDTO> boardList = boardService.paging(pageable);
     }
 }
