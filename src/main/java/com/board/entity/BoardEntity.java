@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // DB의 테이블 역할을 하는 클래스 -> 테이블 객체 (SpringData JPA 에서는 필수)
 @Entity
 @Getter
@@ -32,6 +35,9 @@ public class BoardEntity extends BaseEntity{
 
     @Column
     private int fileAttached;   // 1 or 0
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
 
     // DTO에 담긴 값들을 Entity 객체로 옮겨 담는 작업
     public static BoardEntity toSaveEntity(BoardDTO boardDTO){
