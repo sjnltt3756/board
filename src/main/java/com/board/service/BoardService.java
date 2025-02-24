@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -55,10 +56,11 @@ public class BoardService {
             String savePath = "/Users/jiminsu/Documents/" + storedFileName; // 4. /Users/사용자이름/87987897_내사진.img
             boardFile.transferTo(new File(savePath)); // 5.
             BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
-            Long savedId = boardRepository.save(boardEntity).getId();
+            Long savedId = boardRepository.save(boardEntity).getId();   // 6.
             BoardEntity board = boardRepository.findById(savedId).get();
+
             BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName);
-            boardFileRepository.save(boardFileEntity);
+            boardFileRepository.save(boardFileEntity); // 7.
         }
 
     }
