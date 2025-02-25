@@ -1,10 +1,13 @@
 package com.board.dto;
 
 import com.board.entity.BoardEntity;
+import com.board.entity.BoardFileEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 // DTO(Data Transfer Object), VO, Bean -> 데이터를 전송할 때 사용하는 객체
 @Getter
@@ -23,9 +26,12 @@ public class BoardDTO {
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdateTime;
 
-    private MultipartFile boardFile;    // MultipartFile 타입으로 save.html -> controller 파일을 담는다.
-    private String originalFileName;    // 원본 파일 이름
-    private String storedFileName;      // 서버 저장용 파일 이름
+    //private MultipartFile boardFile;    // MultipartFile 타입으로 save.html -> controller 파일을 담는다.
+    private List<MultipartFile> boardFile; // 다중파일 첨부할 때는 List<>를 사용한다   // MultipartFile 타입으로 save.html -> controller 파일을 담는다.
+    //private String originalFileName;    // 원본 단일 파일 이름
+    private List<String> originalFileName;    // 원본 다중 첨부 파일 이름
+    //private String storedFileName;      // 서버 저장용 단일 파일 이름
+    private List<String> storedFileName;      // 서버 저장용 다중 첨부 파일 이름
     private int fileAttached;           // 파일 첨부 여부(첨부 1, 미첨부 0)
 
     public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, LocalDateTime boardCreatedTime) {
@@ -48,14 +54,21 @@ public class BoardDTO {
         boardDTO.setBoardUpdateTime(boardEntity.getUpdatedTime());
         if(boardEntity.getFileAttached()==0){
             boardDTO.setFileAttached(boardEntity.getFileAttached());    // 0
-        }else{
+        }else {
+            List<String> originalFileNameList = new ArrayList<>();
+            List<String> storedFileNameList = new ArrayList<>();
             boardDTO.setFileAttached(boardEntity.getFileAttached());    // 1
-            // 파일 이름을 가져가야 함
-            // originalFileName, StoredFileName : board_file_table (BoardFileEntity)
-            // join
-            // select * from board_table b, board_file_table bf where b.id = bf.board_id and where b.id = ?
+            for (BoardFileEntity boardFileEntity : boardEntity.getBoardFileEntities()) {
+                originalFileNameList.add(boardFileEntity.getOriginalFileName());
+                storedFileNameList.add(boardFileEntity.getStoredFileName());
+                // 파일 이름을 가져가야 함
+                // originalFileName, StoredFileName : board_file_table (BoardFileEntity)
+                // join
+                // select * from board_table b, board_file_table bf where b.id = bf.board_id and where b.id = ?
+            }
+            boardDTO.setOriginalFileName(originalFileNameList);
+            boardDTO.setStoredFileName(storedFileNameList);
         }
-
         return boardDTO;
     }
 }
