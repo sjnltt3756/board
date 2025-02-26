@@ -11,7 +11,7 @@ import lombok.Setter;
 public class BoardFileEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private String originalFileName;
