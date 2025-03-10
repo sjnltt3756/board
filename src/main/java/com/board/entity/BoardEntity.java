@@ -39,6 +39,9 @@ public class BoardEntity extends BaseEntity{
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntities = new ArrayList<>();
+
     // DTO에 담긴 값들을 Entity 객체로 옮겨 담는 작업
     public static BoardEntity toSaveEntity(BoardDTO boardDTO){
         BoardEntity boardEntity = new BoardEntity();
